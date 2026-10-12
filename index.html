@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ချယ်ရီလန်း ချေးငွေ လုပ်ငန်း</title>
+<style>
+body{margin:0;font-family:Arial;background:#fff5f8}
+header{background:#c2185b;color:white;padding:25px;border-radius:0 0 25px 25px}
+.container{padding:15px}
+.card{background:white;padding:15px;margin:10px 0;border-radius:15px;box-shadow:0 2px 8px #0002}
+button{background:#c2185b;color:white;border:0;padding:12px;border-radius:10px;margin:4px}
+input{width:100%;padding:12px;margin:6px 0;box-sizing:border-box;border:1px solid #ddd;border-radius:10px}
+</style>
+</head>
+
+<body>
+
+<header>
+<h2>🌸 ချယ်ရီလန်း ချေးငွေ လုပ်ငန်း</h2>
+<p>ချေးငွေ စာရင်းမှတ်တမ်း</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+<h3>👤 ချေးယူသူထည့်ရန်</h3>
+
+<input id="name" placeholder="အမည်">
+
+<input id="amount" type="number" placeholder="ချေးငွေပမာဏ">
+
+<input id="due" type="date">
+
+<button onclick="add()">စာရင်းထည့်မယ်</button>
+</div>
+
+<div class="card">
+<h3>📋 ချေးငွေစာရင်း</h3>
+<div id="list"></div>
+</div>
+
+</div>
+
+<script>
+
+let data=JSON.parse(
+localStorage.getItem("cherryLoan")||"[]"
+);
+
+function save(){
+localStorage.setItem(
+"cherryLoan",
+JSON.stringify(data)
+);
+}
+
+function add(){
+
+let name=document.getElementById("name").value;
+let amount=document.getElementById("amount").value;
+let due=document.getElementById("due").value;
+
+if(!name||!amount||!due){
+
+alert("အချက်အလက်အပြည့်ထည့်ပါ");
+
+return;
+}
+
+data.push({
+name:name,
+amount:amount,
+due:due
+});
+
+save();
+
+document.getElementById("name").value="";
+document.getElementById("amount").value="";
+document.getElementById("due").value="";
+
+show();
+
+}
+
+function show(){
+
+let html="";
+
+data.forEach(function(x,i){
+
+html+=`
+<div class="card">
+
+<b>👤 ${x.name}</b>
+
+<p>💰 ${Number(x.amount).toLocaleString()} Ks</p>
+
+<p>📅 ပြန်ဆပ်ရမည့်နေ့ - ${x.due}</p>
+
+<button onclick="del(${i})">ဖျက်</button>
+
+</div>
+`;
+
+});
+
+document.getElementById("list").innerHTML=html;
+
+}
+
+function del(i){
+
+data.splice(i,1);
+
+save();
+
+show();
+
+}
+
+show();
+
+</script>
+
+</body>
+</html>
